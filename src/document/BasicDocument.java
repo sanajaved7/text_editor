@@ -28,8 +28,12 @@ public class BasicDocument extends Document
 	@Override
 	public int getNumWords()
 	{
-		//TODO: Implement this method.  See the Module 1 support videos 
-	    // if you need help.
+		String text = getText();
+		if (text.length() != 0) {
+			String search = "[a-zA-Z]+";
+			int size = getTokens(search).size();
+			return size;
+		}
 	    return 0;
 	}
 	
