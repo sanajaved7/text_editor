@@ -8,6 +8,9 @@ import java.util.List;
  */
 public class BasicDocument extends Document 
 {
+	private String word;
+
+
 	/** Create a new BasicDocument object
 	 * 
 	 * @param text The full text of the Document.
@@ -67,10 +70,50 @@ public class BasicDocument extends Document
 	 */
 	@Override
 	public int getNumSyllables()
-	{
-	    //TODO: Implement this method.  See the Module 1 support videos 
-        // if you need help.
-        return 0;
+	{	
+		// splits text into words using regex,
+		// loops over each word,
+		// if e at the end of the word and 2nd to last letter,
+		// isn't a vowel as well, subtracts from syllable count,
+		// then goes on to count syllables using regex.
+		
+		
+		//turns text all into lower case so easier 
+		//to check and manipulate text later on
+		String text = getText().toLowerCase();
+		
+		//ensures text isn't empty
+		if (text.length() !=0){
+			String[] words = text.split("[^a-zA-Z0-9]+");
+			int count = 0;
+			
+			for (String word : words) {
+				// accounts for edge case with the word "the"
+				if (word.equals("the")){
+					count++;
+				}
+				int word_length = word.length();
+				if (word_length > 2){
+					char[] word_letters = word.toCharArray();
+					char last_letter = word_letters[word_length-1];
+					if ('e' == last_letter){
+						char second_to_last_letter = word_letters[word_length-2];
+						if ('a' != second_to_last_letter && 'e'!= second_to_last_letter && 'i'!=second_to_last_letter && 'o'!=second_to_last_letter && 'u'!=second_to_last_letter && 'y'!=second_to_last_letter){
+							count--;
+						}
+					}
+				}
+				String search = "[aeiouyAEIOUY]+";
+				int size = getWordTokens(search, word).size();
+				count += size;
+				System.out.print(word);
+				System.out.println(count);
+			}
+			return count;
+		}
+		else {
+			return 0;
+		}
 	}
 	
 	
@@ -89,13 +132,11 @@ public class BasicDocument extends Document
 				+ "find 3 sentences, 33 words, and 49 syllables. Not every word will have "
 				+ "the correct amount of syllables (example, for example), "
 				+ "but most of them will."), 49, 33, 3);
-		testCase(new BasicDocument("Segue"), 2, 1, 1);
+		testCase(new BasicDocument("Segue Double"), 3, 2, 1);
 		testCase(new BasicDocument("Sentence"), 2, 1, 1);
 		testCase(new BasicDocument("Sentences?!"), 3, 1, 1);
 		testCase(new BasicDocument("Lorem ipsum dolor sit amet, qui ex choro quodsi moderatius, nam dolores explicari forensibus ad."),
 		         32, 15, 1);
-		
-		
 	}
 	
 }

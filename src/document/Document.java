@@ -42,6 +42,20 @@ public abstract class Document {
 		return tokens;
 	}
 	
+	protected List<String> getWordTokens(String pattern, String word)
+	{
+		//similar to getTokens but specifically for the for loop over words in the text
+		ArrayList<String> tokens = new ArrayList<String>();
+		Pattern tokSplitter = Pattern.compile(pattern);
+		Matcher m = tokSplitter.matcher(word);
+		
+		while (m.find()) {
+			tokens.add(m.group());
+		}
+		
+		return tokens;
+	}
+	
 	// This is a helper function that returns the number of syllables
 	// in a word.  You should write this and use it in your 
 	// BasicDocument class.
@@ -116,8 +130,12 @@ public abstract class Document {
 	/** return the Flesch readability score of this document */
 	public double getFleschScore()
 	{
-	    // TODO: Implement this method
-	    return 0.0;
+	    //casts int values to double to avoid roundoff error
+		double words = (double) getNumWords();
+	    double sentences = (double) getNumSentences();
+	    double syllables = (double) getNumSyllables();
+		double score = 206.835 - (1.015 * (words/sentences)) - (84.6 * (syllables/words));
+	    return score;
 	}
 	
 	
